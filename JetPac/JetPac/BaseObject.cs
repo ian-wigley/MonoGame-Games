@@ -9,6 +9,8 @@ namespace JetPac
         protected int m_width;
         protected int m_height;
         protected int m_frame;
+        protected double m_delayCounter = 0;
+        protected const double m_elapsedCounter = 0.1;
         protected Texture2D m_image;
         protected Rectangle m_rect;
         protected Vector2 m_screenLocation;

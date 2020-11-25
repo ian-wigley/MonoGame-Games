@@ -17,15 +17,20 @@ namespace JetPac
 
         public void Update()
         {
-            if (m_frame < 16)
-            {
-                m_frame += 1;
-            }
-            else
-            {
-                m_animationComplete = true;
-            }
             m_rect = new Rectangle(m_frame * m_width, 0, m_width, m_height);
+            m_delayCounter += m_elapsedCounter;
+            if (m_delayCounter > 0.2)
+            {
+                m_delayCounter = 0;
+                if (m_frame < 16)
+                {
+                    m_frame += 1;
+                }
+                else
+                {
+                    m_animationComplete = true;
+                }
+            }
         }
 
         new public void Draw(SpriteBatch spriteBatch)
