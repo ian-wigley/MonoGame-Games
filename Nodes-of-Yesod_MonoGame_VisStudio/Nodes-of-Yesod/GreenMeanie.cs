@@ -39,7 +39,7 @@ namespace Nodes_of_Yesod
                 facingLeft = true;
             }
 
-            foreach (Rectangle wallRects in mWalls)
+            foreach (var wallRects in mWalls)
             {
                 if (GreenMeanieRect.Intersects(wallRects))
                 {
@@ -68,12 +68,6 @@ namespace Nodes_of_Yesod
             }
         }
 
-        public Rectangle GreenMeanieRect
-        {
-            get
-            {
-                return new Rectangle((int)PositionX, (int)PositionY, 64, 69);
-            }
-        }
+        public Rectangle GreenMeanieRect => new((int)PositionX, (int)PositionY, 64, 69);
     }
 }
