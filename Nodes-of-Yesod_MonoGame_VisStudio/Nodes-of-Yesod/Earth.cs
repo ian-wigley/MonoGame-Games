@@ -21,13 +21,7 @@ namespace Nodes_of_Yesod
             mSprites = sprite;
         }
 
-        public Rectangle earthRect
-        {
-            get
-            {
-                return new Rectangle(mEarthFrame * mSpriteWidth, 10 * mSpriteHeight, mSpriteWidth, mSpriteHeight);
-            }
-        }
+        public Rectangle earthRect => new(mEarthFrame * mSpriteWidth, 10 * mSpriteHeight, mSpriteWidth, mSpriteHeight);
 
         public void Update(GameTime gameTime)
         {
