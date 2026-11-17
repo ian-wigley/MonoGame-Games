@@ -45,7 +45,7 @@ namespace Nodes_of_Yesod
                 SpeedY *= -1;
             }
 
-            foreach (Rectangle wallRects in mWalls)
+            foreach (var wallRects in mWalls)
             {
                 if (FishRect.Intersects(wallRects))
                 {
@@ -75,12 +75,6 @@ namespace Nodes_of_Yesod
             }
         }
 
-        public Rectangle FishRect
-        {
-            get
-            {
-                return new Rectangle((int)PositionX, (int)PositionY, 64, 69);
-            }
-        }
+        public Rectangle FishRect => new((int)PositionX, (int)PositionY, 64, 69);
     }
 }
