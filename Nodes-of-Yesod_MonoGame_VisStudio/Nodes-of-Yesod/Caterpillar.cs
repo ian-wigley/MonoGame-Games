@@ -31,7 +31,7 @@ namespace Nodes_of_Yesod
                 }
             }
 
-            foreach (Rectangle wallRects in mWalls)
+            foreach (var wallRects in mWalls)
             {
                 if (CaterpillarRect.Intersects(wallRects))
                 {
@@ -60,12 +60,6 @@ namespace Nodes_of_Yesod
             }
         }
 
-        public Rectangle CaterpillarRect
-        {
-            get
-            {
-                return new Rectangle((int)PositionX, (int)PositionY, 64, 69);
-            }
-        }
+        public Rectangle CaterpillarRect => new((int)PositionX, (int)PositionY, 64, 69);
     }
 }
