@@ -70,7 +70,7 @@ namespace Nodes_of_Yesod
             //    }
             //}
 
-            foreach (Rectangle platform in mPlatforms)
+            foreach (var platform in mPlatforms)
             {
                 if (BlueThingyRect.Intersects(platform))
                 {
@@ -122,12 +122,6 @@ namespace Nodes_of_Yesod
                 }
             }
         }
-        public Rectangle BlueThingyRect
-        {
-            get
-            {
-                return new Rectangle((int)PositionX + 20, (int)PositionY + 40, 20, 30);
-            }
-        }
+        public Rectangle BlueThingyRect => new((int)PositionX + 20, (int)PositionY + 40, 20, 30);
     }
 }
