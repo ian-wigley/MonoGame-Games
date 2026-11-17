@@ -139,7 +139,7 @@ namespace Nodes_of_Yesod
             {
                 if (Falling && !summerSaultJump)
                 {
-                    foreach (Rectangle platforms in mPlatforms)
+                    foreach (var platforms in mPlatforms)
                     {
                         if (charlieRect.Intersects(platforms) && (charlieRect.Bottom == platforms.Top ||
                                 charlieRect.Bottom == platforms.Top + 1 ||
@@ -151,7 +151,7 @@ namespace Nodes_of_Yesod
                         }
                     }
 
-                    foreach (Rectangle floor in mFloor)
+                    foreach (var floor in mFloor)
                     {
                         if (charlieRect.Intersects(floor))
                         {
@@ -166,11 +166,11 @@ namespace Nodes_of_Yesod
                 // Check to see if Charlie hits a ledge when summersault jumping
                 if (summerSaultJump && mTrip && mPlatforms.Count > 0)
                 {
-                    foreach (Rectangle platforms in mPlatforms)
+                    foreach (var platforms in mPlatforms)
                     {
                         if (charlieRect.Intersects(platforms))
                         {
-                            int charBottom = platforms.Top - charlieRect.Height;
+                            var charBottom = platforms.Top - charlieRect.Height;
                             if (charlieRect.Top <= platforms.Top)
                             {
                                 YPosition = charBottom - 5;
@@ -191,7 +191,7 @@ namespace Nodes_of_Yesod
                 // Check to see if Charlie is jumping and hits a ledge from underneath
                 if (Jump && mPlatforms.Count > 0)
                 {
-                    foreach (Rectangle platforms in mPlatforms)
+                    foreach (var platforms in mPlatforms)
                     {
                         if (charlieRect.Intersects(platforms) && (charlieRect.Top >= platforms.Bottom - 16 && charlieRect.Top <= platforms.Bottom - 10))
                         {
@@ -205,9 +205,9 @@ namespace Nodes_of_Yesod
                 // Check to see if Charlie has walked over a gap in the floor
                 if (!Falling && !WalkingOnFloor && !summerSaultJump)
                 {
-                    int platformCount = mPlatforms.Count;
-                    int checkCounter = 0;
-                    foreach (Rectangle platforms in mPlatforms)
+                    var platformCount = mPlatforms.Count;
+                    var checkCounter = 0;
+                    foreach (var platforms in mPlatforms)
                     {
                         if (!charlieRect.Intersects(platforms))
                         {
@@ -222,9 +222,9 @@ namespace Nodes_of_Yesod
 
                 if (WalkingOnFloor)
                 {
-                    int floorCount = mFloor.Count;
-                    int checkCounter = 0;
-                    foreach (Rectangle floor in mFloor)
+                    var floorCount = mFloor.Count;
+                    var checkCounter = 0;
+                    foreach (var floor in mFloor)
                     {
                         if (!charlieRect.Intersects(floor))
                         {
@@ -240,7 +240,7 @@ namespace Nodes_of_Yesod
                 // Check to see if Charlie walks into the walls
                 if (mWalls.Count > 0)
                 {
-                    foreach (Rectangle wallRects in mWalls)
+                    foreach (var wallRects in mWalls)
                     {
                         if (charlieRect.Intersects(wallRects))
                         {
@@ -260,7 +260,7 @@ namespace Nodes_of_Yesod
 
                 if (mEdibleWalls.Count > 0)
                 {
-                    foreach (Rectangle edible in mEdibleWalls)
+                    foreach (var edible in mEdibleWalls)
                     {
                         if (edible.IsEmpty && XPosition < 50)
                         {
@@ -295,7 +295,7 @@ namespace Nodes_of_Yesod
 
                 if (mRoof.Count > 0)
                 {
-                    foreach (Rectangle roof in mRoof)
+                    foreach (var roof in mRoof)
                     {
                         if (charlieRect.Intersects(roof))
                         {
@@ -307,14 +307,14 @@ namespace Nodes_of_Yesod
 
                 if (mAlchiems.Count > 0)
                 {
-                    foreach (Rectangle alchiems in mAlchiems)
+                    foreach (var alchiems in mAlchiems)
                     {
                         if (charlieRect.Intersects(alchiems))
                         {
-                            int span = mBelowScreenCounter * 10;
-                            for (int i = span; i < span + 13; i++)
+                            var span = mBelowScreenCounter * 10;
+                            for (var i = span; i < span + 13; i++)
                             {
-                                for (int j = 1; j < 10; j++)
+                                for (var j = 1; j < 10; j++)
                                 {
 
                                     if (mtoTheUndergound[i, j] == 22)
@@ -331,13 +331,7 @@ namespace Nodes_of_Yesod
             }
         }
 
-        public Rectangle charlieRect
-        {
-            get
-            {
-                return new Rectangle(XPosition + 20, YPosition, 30, 69);
-            }
-        }
+        public Rectangle charlieRect => new(XPosition + 20, YPosition, 30, 69);
 
         public Rectangle ColTileRect0 { get; set; }
         public Rectangle ColTileRect1 { get; set; }
@@ -348,6 +342,6 @@ namespace Nodes_of_Yesod
         public bool WalkingOnFloor { get; set; }
         public int XPosition { get; set; }
         public int YPosition { get; set; }
-        public int Lives { get; set; }
+        public int Lives { get; }
     }
 }
