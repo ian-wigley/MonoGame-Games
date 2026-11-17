@@ -17,7 +17,7 @@ namespace Nodes_of_Yesod
 
         public int LevelNumber { get; private set; }
 
-        public List<Tile> TileList { get; private set; } = new List<Tile>();
+        public List<Tile> TileList { get; } = [];
 
     }
 }
