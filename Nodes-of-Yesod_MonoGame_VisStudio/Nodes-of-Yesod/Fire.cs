@@ -33,7 +33,7 @@ namespace Nodes_of_Yesod
                 }
             }
 
-            foreach (Rectangle wallRects in mWalls)
+            foreach (var wallRects in mWalls)
             {
                 if (FireRect.Intersects(wallRects))
                 {
@@ -51,12 +51,6 @@ namespace Nodes_of_Yesod
             }
         }
 
-        public Rectangle FireRect
-        {
-            get
-            {
-                return new Rectangle((int)PositionX, (int)PositionY, 64, 69);
-            }
-        }
+        public Rectangle FireRect => new((int)PositionX, (int)PositionY, 64, 69);
     }
 }
