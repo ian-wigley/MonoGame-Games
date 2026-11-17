@@ -33,7 +33,7 @@ namespace Nodes_of_Yesod
                 }
             }
 
-            foreach (Rectangle wallRects in mWalls)
+            foreach (var wallRects in mWalls)
             {
                 if (BirdRect.Intersects(wallRects))
                 {
@@ -62,12 +62,6 @@ namespace Nodes_of_Yesod
             }
         }
 
-        public Rectangle BirdRect
-        {
-            get
-            {
-                return new Rectangle((int)PositionX, (int)PositionY, 64, 69);
-            }
-        }
+        public Rectangle BirdRect => new((int)PositionX, (int)PositionY, 64, 69);
     }
 }
