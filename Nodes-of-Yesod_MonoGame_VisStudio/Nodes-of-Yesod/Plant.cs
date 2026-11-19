@@ -2,49 +2,39 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Nodes_of_Yesod
+namespace Nodes_of_Yesod;
+
+public class Plant : Enemy
 {
-    public class Plant : Enemy
+    public Plant() : base(0, 0, 0, null, null)
     {
-        private int mPlantX;
-        private int mPlantY;
-        private int mPlantFrame = 17;
+    }
 
-        public Plant(float xPos, float yPos, float speedX, float speedY, Texture2D sprite, List<Rectangle> walls)
-            : base(xPos, yPos, speedX, speedY, sprite, walls)
+    public Plant(float xPos, float yPos, float speedX, Texture2D sprite, List<Rectangle> walls)
+        : base(xPos, yPos, speedX, 1.0f, sprite, walls)
+    {
+        mSprite = sprite;
+        CurrentFrameX = 2;
+        CurrentFrameY = 9;
+        SheetSize = 3;
+        timeSinceLastFrame = 0;
+    }
+
+    public Rectangle PlantRect => new(CurrentFrameX * MSpriteWidth, 9 * MSpriteHeight, MSpriteWidth, MSpriteHeight);
+
+    public override void Update(GameTime gameTime)
+    {
+        timeSinceLastFrame += gameTime.ElapsedGameTime.Milliseconds;
+        if (timeSinceLastFrame > 0.6)
         {
-            mSprite = sprite;
-            mPlantX = 2;
-            mPlantY = 9;
-            SheetSize = 3;
             timeSinceLastFrame = 0;
+            CurrentFrameX++;
         }
+        if (CurrentFrameX >= 6) CurrentFrameX = 0;
+    }
 
-        public override void Update(GameTime gameTime)
-        {
-            timeSinceLastFrame += gameTime.ElapsedGameTime.Milliseconds;
-            if (timeSinceLastFrame > 0.6)
-            {
-                timeSinceLastFrame = 0;
-                mPlantFrame++;
-            }
-            if (mPlantFrame >= 6)
-            {
-                mPlantFrame = 0;
-            }
-        }
-
-        new public void Draw(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(mSprite, new Vector2(mPlantX, mPlantY), PlantRect, Color.White);
-        }
-
-        public Rectangle PlantRect
-        {
-            get
-            {
-                return new Rectangle(mPlantFrame * mSpriteWidth, 9 * mSpriteHeight, mSpriteWidth, mSpriteHeight);
-            }
-        }
+    public new void Draw(SpriteBatch spriteBatch)
+    {
+        spriteBatch.Draw(mSprite, new Vector2(CurrentFrameX, CurrentFrameY), PlantRect, Color.White);
     }
 }
