@@ -1,55 +1,33 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Nodes_of_Yesod
+namespace Nodes_of_Yesod;
+
+internal class Rocket(Texture2D sprite)
 {
-    class Rocket
+    private const int MRocketFrame = 16;
+    private int mRocketX;
+    private const int SpriteHeight = 69;
+    private const int SpriteWidth = 64;
+
+    public Rectangle RocketRect => new(MRocketFrame * SpriteWidth, 7 * SpriteHeight, SpriteWidth, SpriteHeight);
+
+    public int RocketScreen { get; private set; }
+
+    public void Update(GameTime gameTime)
     {
-        private int mRocketX = 0;
-        private int mRocketScreen = 0;
-        private int mRocketFrame = 16;
-        private Texture2D mSprites;
-        int spriteWidth = 64;
-        int spriteHeight = 69;
-
-        public Rocket(Texture2D sprite)
+        if (mRocketX is >= 0 and <= 800) mRocketX += 1;
+        if (mRocketX >= 801)
         {
-            mSprites = sprite;
+            mRocketX = 0;
+            RocketScreen += 1;
         }
 
-        public void Update(GameTime gameTime)
-        {
-            if (mRocketX >= 0 && mRocketX <= 800)
-            {
-                mRocketX += 1;
-            }
-            if (mRocketX >= 801)
-            {
-                mRocketX = 0;
-                mRocketScreen += 1;
-            }
-            if (mRocketScreen > 15)
-            {
-                mRocketScreen = 0;
-            }
-        }
+        if (RocketScreen > 15) RocketScreen = 0;
+    }
 
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(mSprites, new Vector2(mRocketX, 100.0f), RocketRect, Color.White);
-        }
-
-        public Rectangle RocketRect
-        {
-            get
-            {
-                return new Rectangle(mRocketFrame * spriteWidth, 7 * spriteHeight, spriteWidth, spriteHeight);
-            }
-        }
-
-        public int RocketScreen
-        {
-            get { return mRocketScreen; }
-        }
+    public void Draw(SpriteBatch spriteBatch)
+    {
+        spriteBatch.Draw(sprite, new Vector2(mRocketX, 100.0f), RocketRect, Color.White);
     }
 }
