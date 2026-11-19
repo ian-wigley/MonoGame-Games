@@ -1,45 +1,35 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Nodes_of_Yesod
+namespace Nodes_of_Yesod;
+
+internal class Earth(Texture2D sprite)
 {
-    class Earth
+    private const double elapsedSecs = 0.1f;
+
+    private double animTimer;
+    private int mEarthFrame;
+    private readonly int mEarthX = 600;
+    private readonly int mEarthY = 20;
+    private readonly int mSpriteHeight = 69;
+    private readonly int mSpriteWidth = 64;
+
+    public Rectangle EarthRect => new(mEarthFrame * mSpriteWidth, 10 * mSpriteHeight, mSpriteWidth, mSpriteHeight);
+
+    public void Update(GameTime gameTime)
     {
-        private int mEarthX = 600;
-        private int mEarthY = 20;
-        private int mEarthFrame = 0;
-        private int mSpriteWidth = 64;
-        private int mSpriteHeight = 69;
-
-        private Texture2D mSprites;
-
-        protected double animTimer = 0;
-        protected const double elapsedSecs = 0.1f;
-
-        public Earth(Texture2D sprite)
+        animTimer += elapsedSecs;
+        if (animTimer > 1.2)
         {
-            mSprites = sprite;
+            animTimer = 0;
+            mEarthFrame++;
         }
 
-        public Rectangle earthRect => new(mEarthFrame * mSpriteWidth, 10 * mSpriteHeight, mSpriteWidth, mSpriteHeight);
+        if (mEarthFrame >= 15) mEarthFrame = 0;
+    }
 
-        public void Update(GameTime gameTime)
-        {
-            animTimer += elapsedSecs;
-            if (animTimer > 1.2)
-            {
-                animTimer = 0;
-                mEarthFrame++;
-            }
-            if (mEarthFrame >= 15)
-            {
-                mEarthFrame = 0;
-            }
-        }
-
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(mSprites, new Vector2(mEarthX, mEarthY), earthRect, Color.White);
-        }
+    public void Draw(SpriteBatch spriteBatch)
+    {
+        spriteBatch.Draw(sprite, new Vector2(mEarthX, mEarthY), EarthRect, Color.White);
     }
 }
