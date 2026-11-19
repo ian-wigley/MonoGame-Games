@@ -1,23 +1,15 @@
 ﻿using System.Collections.Generic;
 
-namespace Nodes_of_Yesod
+namespace Nodes_of_Yesod;
+
+public class Level(int levelNumber)
 {
-    public class Level
+    public int LevelNumber { get; private set; } = levelNumber;
+
+    public List<Tiled> TileList { get; } = [];
+
+    public void AddTile(Tiled tile)
     {
-
-        public Level(int levelNumber)
-        {
-            LevelNumber = levelNumber;
-        }
-
-        public void AddTile(Tile tile)
-        {
-            TileList.Add(tile);
-        }
-
-        public int LevelNumber { get; private set; }
-
-        public List<Tile> TileList { get; } = [];
-
+        TileList.Add(tile);
     }
 }
