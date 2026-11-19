@@ -1,73 +1,64 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
 
-namespace Nodes_of_Yesod
+namespace Nodes_of_Yesod;
+
+public class GreenMeanie : Enemy
 {
-    public class GreenMeanie : Enemy
+    public GreenMeanie() : base(0, 0, 0, null, null)
     {
-        public GreenMeanie(float xPos, float yPos, float speedX, Texture2D sprite, List<Rectangle> walls)
-            : base(xPos, yPos, speedX, sprite, walls)
+    }
+
+    public GreenMeanie(float xPos, float yPos, float speedX, Texture2D sprite, List<Rectangle> walls)
+        : base(xPos, yPos, speedX, sprite, walls)
+    {
+        CurrentFrameX = 0;
+        CurrentFrameY = 4;
+        SheetSize = 4;
+        timeSinceLastFrame = 0;
+        millisecondsPerFrame = 100;
+        facingLeft = false;
+    }
+
+    public Rectangle GreenMeanieRect => new((int)PositionX, (int)PositionY, 64, 69);
+
+    public override void Update(GameTime gameTime)
+    {
+        timeSinceLastFrame += gameTime.ElapsedGameTime.Milliseconds;
+        PositionX += SpeedX;
+
+        if (timeSinceLastFrame > millisecondsPerFrame)
         {
-            CurrentFrameX = 0;
-            CurrentFrameY = 4;
-            SheetSize = 4;
-            timeSinceLastFrame = 0;
-            millisecondsPerFrame = 100;
-            facingLeft = false;
+            timeSinceLastFrame -= millisecondsPerFrame;
+
+            ++CurrentFrameX;
+            if (CurrentFrameX >= SheetSize) CurrentFrameX = 0;
         }
 
-        public override void Update(GameTime gameTime)
+        if (PositionX > 750)
         {
-            timeSinceLastFrame += gameTime.ElapsedGameTime.Milliseconds;
-            PositionX += SpeedX;
+            SpeedX *= -1;
+            facingLeft = true;
+        }
 
-            if (timeSinceLastFrame > millisecondsPerFrame)
+        foreach (var wallRects in mWalls)
+            if (GreenMeanieRect.Intersects(wallRects))
             {
-                timeSinceLastFrame -= millisecondsPerFrame;
-
-                ++CurrentFrameX;
-                if (CurrentFrameX >= SheetSize)
+                if (SpeedX > 0)
                 {
-                    CurrentFrameX = 0;
+                    PositionX -= 5;
+                    SpeedX *= -1;
+                    facingLeft = true;
+                }
+                else
+                {
+                    PositionX += 5;
+                    SpeedX *= -1;
+                    facingLeft = false;
                 }
             }
 
-            if (PositionX > 750)
-            {
-                SpeedX *= -1;
-                facingLeft = true;
-            }
-
-            foreach (var wallRects in mWalls)
-            {
-                if (GreenMeanieRect.Intersects(wallRects))
-                {
-                    if (SpeedX > 0)
-                    {
-                        PositionX -= 5;
-                        SpeedX *= -1;
-                        facingLeft = true;
-                    }
-                    else
-                    {
-                        PositionX += 5;
-                        SpeedX *= -1;
-                        facingLeft = false;
-                    }
-                }
-            }
-
-            if (facingLeft)
-            {
-                flip = SpriteEffects.FlipHorizontally;
-            }
-            else
-            {
-                flip = SpriteEffects.None;
-            }
-        }
-
-        public Rectangle GreenMeanieRect => new((int)PositionX, (int)PositionY, 64, 69);
+        flip = facingLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
     }
 }
