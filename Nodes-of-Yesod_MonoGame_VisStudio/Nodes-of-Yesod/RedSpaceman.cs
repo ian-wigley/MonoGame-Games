@@ -1,49 +1,45 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
 
-namespace Nodes_of_Yesod
+namespace Nodes_of_Yesod;
+
+internal class RedSpaceman : Enemy
 {
-    class RedSpaceman : Enemy
+    private int mRedSpacemanFrame = 17;
+    private readonly int mRedSpacemanX;
+    private readonly int mRedSpacemanY;
+
+    public RedSpaceman() : base(0, 0, 0, null, null)
     {
-        private int mRedSpacemanX = 0;
-        private int mRedSpacemanY = 0;
-        private int mRedSpacemanFrame = 17;
+    }
 
-        public RedSpaceman(float xPos, float yPos, float speedX, float speedY, Texture2D sprite, List<Rectangle> walls)
-            : base(xPos, yPos, speedX, speedY, sprite, walls)
+    public RedSpaceman(float xPos, float yPos, float speedX, float speedY, Texture2D sprite, List<Rectangle> walls)
+        : base(xPos, yPos, speedX, speedY, sprite, walls)
+    {
+        mRedSpacemanX = 2;
+        mRedSpacemanY = 9;
+        SheetSize = 3;
+        timeSinceLastFrame = 0;
+    }
+
+    public Rectangle RedSpacemanRect =>
+        new(mRedSpacemanFrame * MSpriteWidth, 9 * MSpriteHeight, MSpriteWidth, MSpriteHeight);
+
+    public override void Update(GameTime gameTime)
+    {
+        timeSinceLastFrame += gameTime.ElapsedGameTime.Milliseconds;
+        if (timeSinceLastFrame > 0.6)
         {
-            mRedSpacemanX = 2;
-            mRedSpacemanY = 9;
-            SheetSize = 3;
             timeSinceLastFrame = 0;
+            mRedSpacemanFrame++;
         }
 
-        public override void Update(GameTime gameTime)
-        {
-            timeSinceLastFrame += gameTime.ElapsedGameTime.Milliseconds;
-            if (timeSinceLastFrame > 0.6)
-            {
-                timeSinceLastFrame = 0;
-                mRedSpacemanFrame++;
-            }
-            if (mRedSpacemanFrame >= 6)
-            {
-                mRedSpacemanFrame = 0;
-            }
-        }
+        if (mRedSpacemanFrame >= 6) mRedSpacemanFrame = 0;
+    }
 
-        new public void Draw(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(mSprite, new Vector2(mRedSpacemanX, mRedSpacemanY), RedSpacemanRect, Color.White);
-        }
-
-        public Rectangle RedSpacemanRect
-        {
-            get
-            {
-                return new Rectangle(mRedSpacemanFrame * mSpriteWidth, 9 * mSpriteHeight, mSpriteWidth, mSpriteHeight);
-            }
-        }
+    public new void Draw(SpriteBatch spriteBatch)
+    {
+        spriteBatch.Draw(mSprite, new Vector2(mRedSpacemanX, mRedSpacemanY), RedSpacemanRect, Color.White);
     }
 }
