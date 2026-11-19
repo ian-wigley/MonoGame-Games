@@ -1,140 +1,88 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
 
-namespace Nodes_of_Yesod
+namespace Nodes_of_Yesod;
+
+public class Mole(Texture2D sprite, List<Rectangle> walls, List<Rectangle> edibleWalls, int[,] toTheUndergound)
 {
-    public class Mole
+    private const double ElapsedSecs = 0.1f;
+    private double animTimer;
+    private SpriteEffects flip = SpriteEffects.None;
+    private int mBelowScreenCounter;
+    private int mMoleFrame;
+    private readonly int mSpriteHeight = 69;
+    private readonly int mSpriteWidth = 64;
+    private List<Rectangle> mWalls = walls;
+
+    public Rectangle MoleCollisionRect => new((int)MolePosX, (int)MolePosY, mSpriteWidth, mSpriteHeight);
+
+    public bool Direction { get; set; } = false;
+
+    public float MolePosX { get; set; } = 200;
+
+    public float MolePosY { get; set; } = 100;
+
+
+    public void Update(GameTime gameTime, int belowScreenCounter, int screenCounter)
     {
-        private int mMoleFrame = 0;
-        private int mSpriteWidth = 64;
-        private int mSpriteHeight = 69;
-        private int[,] mtoTheUndergound;
-        private int mBelowScreenCounter;
-        private Texture2D mSprites;
-        private List<Rectangle> mWalls;
-        private List<Rectangle> mEdibleWalls;
-
-        protected double animTimer = 0;
-        protected const double elapsedSecs = 0.1f;
-        private SpriteEffects flip = SpriteEffects.None;
-
-        public Mole(Texture2D sprite, List<Rectangle> walls, List<Rectangle> edibleWalls, int[,] toTheUndergound)
+        mBelowScreenCounter = belowScreenCounter;
+        animTimer += ElapsedSecs;
+        if (animTimer > 1.2)
         {
-            mSprites = sprite;
-            mWalls = walls;
-            mEdibleWalls = edibleWalls;
-            mtoTheUndergound = toTheUndergound;
+            animTimer = 0;
+            mMoleFrame++;
         }
 
+        if (mMoleFrame >= 8) mMoleFrame = 0;
 
-        public void Update(GameTime gameTime, int belowScreenCounter, int screenCounter)
-        {
-            mBelowScreenCounter = belowScreenCounter;
-            animTimer += elapsedSecs;
-            if (animTimer > 1.2)
-            {
-                animTimer = 0;
-                mMoleFrame++;
-            }
-            if (mMoleFrame >= 8)
-            {
-                mMoleFrame = 0;
-            }
+        if (MolePosX < 0) MolePosX += 2;
 
-            if (MolePosX < 0)
-            {
-                MolePosX += 2;
-            }
+        if (MolePosX > 750) MolePosX -= 2;
 
-            if (MolePosX > 750)
-            {
-                MolePosX -= 2;
-            }
+        if (MolePosY < 0) MolePosY += 2;
 
-            if (MolePosY < 0)
-            {
-                MolePosY += 2;
-            }
+        if (MolePosY > 400) MolePosY -= 2;
 
-            if (MolePosY > 400)
-            {
-                MolePosY -= 2;
-            }
+        flip = Direction ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+        if (edibleWalls.Count > 0) Collisions(screenCounter);
+    }
 
-            if (Direction)
-            {
-                flip = SpriteEffects.FlipHorizontally;
-            }
-            else
-            {
-                flip = SpriteEffects.None;
-            }
-            if (mEdibleWalls.Count > 0)
-            {
-                collisions(screenCounter);
-            }
-        }
+    public void Draw(SpriteBatch spriteBatch)
+    {
+        spriteBatch.Draw(sprite, new Vector2(MolePosX, MolePosY),
+            new Rectangle(mMoleFrame * mSpriteWidth,
+                6 * mSpriteHeight,
+                mSpriteWidth, mSpriteHeight), Color.White, 0, Vector2.Zero, 1.0f, flip, 0);
+    }
 
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(mSprites, new Vector2(MolePosX, MolePosY),
-                       new Rectangle(mMoleFrame * mSpriteWidth,
-                       6 * mSpriteHeight,
-                       mSpriteWidth, mSpriteHeight), Color.White, 0, Vector2.Zero, 1.0f, flip, 0);
-        }
-
-        private void collisions(int screenCounter)
-        {
-            foreach (Rectangle ed in mEdibleWalls)
-            {
-                if (MoleCollisionRect.Intersects(ed))
+    private void Collisions(int screenCounter)
+    {
+        foreach (var span in from ed in edibleWalls where MoleCollisionRect.Intersects(ed) select mBelowScreenCounter * 10)
+            for (var i = span; i < span + 13; i++)
+                switch (MolePosX)
                 {
-                    int span = mBelowScreenCounter * 10;
-                    for (int i = span; i < span + 13; i++)
+                    case < 100:
                     {
-                        if (MolePosX < 100)
+                        if (toTheUndergound[i, 1] == 15 || toTheUndergound[i, 1] == 17)
                         {
-                            if (mtoTheUndergound[i, 1] == 15 || mtoTheUndergound[i, 1] == 17)
-                            {
-                                // replace the edible walls with replacement
-                                mtoTheUndergound[i, 1] = 4;
-                                if (screenCounter > 0)
-                                {
-                                    mtoTheUndergound[(i - 10), 12] = 4;
-                                }
-                                else
-                                {
-                                    mtoTheUndergound[(i + 150), 12] = 4;
-                                }
-                            }
+                            // replace the edible walls with replacement
+                            toTheUndergound[i, 1] = 4;
+                            if (screenCounter > 0)
+                                toTheUndergound[i - 10, 12] = 4;
+                            else
+                                toTheUndergound[i + 150, 12] = 4;
                         }
-                        else
-                        {
-                            if (MolePosX > 650)
-                            {
-                                if (mtoTheUndergound[i, 12] == 16 || mtoTheUndergound[i, 12] == 18)
-                                {
-                                    mtoTheUndergound[i, 12] = 4;
-                                }
-                            }
-                        }
+
+                        break;
+                    }
+                    case > 650:
+                    {
+                        if (toTheUndergound[i, 12] == 16 || toTheUndergound[i, 12] == 18)
+                            toTheUndergound[i, 12] = 4;
+                        break;
                     }
                 }
-            }
-        }
-        public Rectangle MoleCollisionRect
-        {
-            get
-            {
-                return new Rectangle((int)MolePosX, (int)MolePosY, mSpriteWidth, mSpriteHeight);
-            }
-        }
-
-        public bool Direction { get; set; } = false;
-
-        public float MolePosX { get; set; } = 200;
-
-        public float MolePosY { get; set; } = 100;
     }
 }
