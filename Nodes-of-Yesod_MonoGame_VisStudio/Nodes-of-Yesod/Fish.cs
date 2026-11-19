@@ -1,80 +1,70 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
 
-namespace Nodes_of_Yesod
+namespace Nodes_of_Yesod;
+
+public class Fish : Enemy
 {
-    public class Fish : Enemy
+    public Fish() : base(0, 0, 0, null, null)
     {
+    }
 
-        public Fish(float xPos, float yPos, float speedX, float speedY, Texture2D sprite, List<Rectangle> walls)
-            : base(xPos, yPos, speedX, speedY, sprite, walls)
+    public Fish(float xPos, float yPos, float speedX, float speedY, Texture2D sprite, List<Rectangle> walls)
+        : base(xPos, yPos, speedX, speedY, sprite, walls)
+    {
+        CurrentFrameX = 7;
+        CurrentFrameY = 5;
+        SheetSize = 6;
+        timeSinceLastFrame = 0;
+        millisecondsPerFrame = 100;
+    }
+
+    public Rectangle FishRect => new((int)PositionX, (int)PositionY, 64, 69);
+
+    public override void Update(GameTime gameTime)
+    {
+        timeSinceLastFrame += gameTime.ElapsedGameTime.Milliseconds;
+        PositionX += SpeedX;
+        PositionY += SpeedY;
+
+        if (timeSinceLastFrame > millisecondsPerFrame)
         {
-            CurrentFrameX = 7;
-            CurrentFrameY = 5;
-            SheetSize = 6;
-            timeSinceLastFrame = 0;
-            millisecondsPerFrame = 100;
-        }
+            timeSinceLastFrame -= millisecondsPerFrame;
 
-        public override void Update(GameTime gameTime)
-        {
-            timeSinceLastFrame += gameTime.ElapsedGameTime.Milliseconds;
-            PositionX += SpeedX;
-            PositionY += SpeedY;
-
-            if (timeSinceLastFrame > millisecondsPerFrame)
+            ++CurrentFrameX;
+            if (CurrentFrameX == 9 && CurrentFrameY == 5)
             {
-                timeSinceLastFrame -= millisecondsPerFrame;
-
-                ++CurrentFrameX;
-                if (CurrentFrameX == 9 && CurrentFrameY == 5)
-                {
-                    CurrentFrameX = 8;
-                    CurrentFrameY = 4;
-                }
-                else if(CurrentFrameX >= 8 + SheetSize)
-                {
-                    CurrentFrameX = 8;
-                }
+                CurrentFrameX = 8;
+                CurrentFrameY = 4;
             }
-
-            if (PositionY > 400 ||
-                    PositionY < 0)
+            else if (CurrentFrameX >= 8 + SheetSize)
             {
-                SpeedY *= -1;
-            }
-
-            foreach (var wallRects in mWalls)
-            {
-                if (FishRect.Intersects(wallRects))
-                {
-
-                    if (SpeedX > 0)
-                    {
-                        PositionX -= 5;
-                        SpeedX *= -1;
-                        facingLeft = true;
-                    }
-                    else
-                    {
-                        PositionX += 5;
-                        SpeedX *= -1;
-                        facingLeft = false;
-                    }
-                }
-            }
-
-            if (facingLeft)
-            {
-                flip = SpriteEffects.FlipHorizontally;
-            }
-            else
-            {
-                flip = SpriteEffects.None;
+                CurrentFrameX = 8;
             }
         }
 
-        public Rectangle FishRect => new((int)PositionX, (int)PositionY, 64, 69);
+        if (PositionY > 400 ||
+            PositionY < 0)
+            SpeedY *= -1;
+
+        foreach (var wallRects in mWalls)
+            if (FishRect.Intersects(wallRects))
+            {
+                if (SpeedX > 0)
+                {
+                    PositionX -= 5;
+                    SpeedX *= -1;
+                    facingLeft = true;
+                }
+                else
+                {
+                    PositionX += 5;
+                    SpeedX *= -1;
+                    facingLeft = false;
+                }
+            }
+
+        flip = facingLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
     }
 }
