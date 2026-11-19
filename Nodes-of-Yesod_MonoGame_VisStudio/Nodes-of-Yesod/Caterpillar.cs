@@ -1,65 +1,56 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
 
-namespace Nodes_of_Yesod
+namespace Nodes_of_Yesod;
+
+public class Caterpillar : Enemy
 {
-    public class Caterpillar : Enemy
+    public Caterpillar() : base(0, 0, 0, null, null)
     {
-        public Caterpillar(float xPos, float yPos, float speedX, Texture2D sprite, List<Rectangle> walls)
-            : base(xPos, yPos, speedX, sprite, walls)
+    }
+
+    public Caterpillar(float xPos, float yPos, float speedX, Texture2D sprite, List<Rectangle> walls)
+        : base(xPos, yPos, speedX, sprite, walls)
+    {
+        CurrentFrameX = 0;
+        CurrentFrameY = 7;
+        SheetSize = 6;
+        timeSinceLastFrame = 0;
+        millisecondsPerFrame = 100;
+    }
+
+    public Rectangle CaterpillarRect => new((int)PositionX, (int)PositionY, 64, 69);
+
+    public override void Update(GameTime gameTime)
+    {
+        timeSinceLastFrame += gameTime.ElapsedGameTime.Milliseconds;
+        PositionX += mSpeed;
+
+        if (timeSinceLastFrame > millisecondsPerFrame)
         {
-            CurrentFrameX = 0;
-            CurrentFrameY = 7;
-            SheetSize = 6;
-            timeSinceLastFrame = 0;
-            millisecondsPerFrame = 100;
+            timeSinceLastFrame -= millisecondsPerFrame;
+            ++CurrentFrameX;
+            if (CurrentFrameX >= SheetSize) CurrentFrameX = 0;
         }
 
-        public override void Update(GameTime gameTime)
-        {
-            timeSinceLastFrame += gameTime.ElapsedGameTime.Milliseconds;
-            PositionX += mSpeed;
-
-            if (timeSinceLastFrame > millisecondsPerFrame)
+        foreach (var wallRects in mWalls)
+            if (CaterpillarRect.Intersects(wallRects))
             {
-                timeSinceLastFrame -= millisecondsPerFrame;
-                ++CurrentFrameX;
-                if (CurrentFrameX >= SheetSize)
+                if (mSpeed > 0)
                 {
-                    CurrentFrameX = 0;
+                    PositionX -= 5;
+                    mSpeed *= -1;
+                    facingLeft = true;
+                }
+                else
+                {
+                    PositionX += 5;
+                    mSpeed *= -1;
+                    facingLeft = false;
                 }
             }
 
-            foreach (var wallRects in mWalls)
-            {
-                if (CaterpillarRect.Intersects(wallRects))
-                {
-                    if (mSpeed > 0)
-                    {
-                        PositionX -= 5;
-                        mSpeed *= -1;
-                        facingLeft = true;
-                    }
-                    else
-                    {
-                        PositionX += 5;
-                        mSpeed *= -1;
-                        facingLeft = false;
-                    }
-                }
-            }
-
-            if (facingLeft)
-            {
-                flip = SpriteEffects.FlipHorizontally;
-            }
-            else
-            {
-                flip = SpriteEffects.None;
-            }
-        }
-
-        public Rectangle CaterpillarRect => new((int)PositionX, (int)PositionY, 64, 69);
+        flip = facingLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
     }
 }
