@@ -16,15 +16,15 @@
         <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.6.1"/>
     </ItemGroup>
     <ItemGroup>
-      <None Remove="levels.txt" />
-      <None Update="Levels\levels.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Levels\levels.txt">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
+        <None Remove="levels.txt"/>
+        <None Update="Levels\levels.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Levels\levels.txt">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Levels\" />
+        <Folder Include="Levels\"/>
     </ItemGroup>
 </Project>
