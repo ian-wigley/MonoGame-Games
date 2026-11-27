@@ -5,23 +5,21 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Nodes_of_Yesod;
 
-public class Mole(Texture2D sprite, List<Rectangle> walls, List<Rectangle> edibleWalls, int[,] toTheUndergound)
+public class Mole(Texture2D sprite, List<Rectangle> walls, List<Rectangle> edibleWalls, int[,] toTheUnderground)
 {
     private const double ElapsedSecs = 0.1f;
     private double animTimer;
     private SpriteEffects flip = SpriteEffects.None;
     private int mBelowScreenCounter;
     private int mMoleFrame;
-    private readonly int mSpriteHeight = 69;
-    private readonly int mSpriteWidth = 64;
+    private const int SpriteHeight = 69;
+    private const int SpriteWidth = 64;
+
     private List<Rectangle> mWalls = walls;
 
-    public Rectangle MoleCollisionRect => new((int)MolePosX, (int)MolePosY, mSpriteWidth, mSpriteHeight);
-
+    private Rectangle MoleCollisionRect => new((int)MolePosX, (int)MolePosY, SpriteWidth, SpriteHeight);
     public bool Direction { get; set; } = false;
-
     public float MolePosX { get; set; } = 200;
-
     public float MolePosY { get; set; } = 100;
 
 
@@ -52,9 +50,9 @@ public class Mole(Texture2D sprite, List<Rectangle> walls, List<Rectangle> edibl
     public void Draw(SpriteBatch spriteBatch)
     {
         spriteBatch.Draw(sprite, new Vector2(MolePosX, MolePosY),
-            new Rectangle(mMoleFrame * mSpriteWidth,
-                6 * mSpriteHeight,
-                mSpriteWidth, mSpriteHeight), Color.White, 0, Vector2.Zero, 1.0f, flip, 0);
+            new Rectangle(mMoleFrame * SpriteWidth,
+                6 * SpriteHeight,
+                SpriteWidth, SpriteHeight), Color.White, 0, Vector2.Zero, 1.0f, flip, 0);
     }
 
     private void Collisions(int screenCounter)
@@ -65,22 +63,22 @@ public class Mole(Texture2D sprite, List<Rectangle> walls, List<Rectangle> edibl
                 {
                     case < 100:
                     {
-                        if (toTheUndergound[i, 1] == 15 || toTheUndergound[i, 1] == 17)
+                        if (toTheUnderground[i, 1] == 15 || toTheUnderground[i, 1] == 17)
                         {
                             // replace the edible walls with replacement
-                            toTheUndergound[i, 1] = 4;
+                            toTheUnderground[i, 1] = 4;
                             if (screenCounter > 0)
-                                toTheUndergound[i - 10, 12] = 4;
+                                toTheUnderground[i - 10, 12] = 4;
                             else
-                                toTheUndergound[i + 150, 12] = 4;
+                                toTheUnderground[i + 150, 12] = 4;
                         }
 
                         break;
                     }
                     case > 650:
                     {
-                        if (toTheUndergound[i, 12] == 16 || toTheUndergound[i, 12] == 18)
-                            toTheUndergound[i, 12] = 4;
+                        if (toTheUnderground[i, 12] == 16 || toTheUnderground[i, 12] == 18)
+                            toTheUnderground[i, 12] = 4;
                         break;
                     }
                 }
