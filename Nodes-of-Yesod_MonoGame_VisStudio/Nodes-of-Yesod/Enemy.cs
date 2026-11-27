@@ -23,18 +23,18 @@ namespace Nodes_of_Yesod;
 [JsonDerivedType(typeof(WoodLouse), "WoodLouse")]
 public abstract class Enemy
 {
-    protected const int MSpriteWidth = 64;
-    protected const int MSpriteHeight = 69;
+    protected const int SpriteWidth = 64;
+    protected const int SpriteHeight = 69;
     protected bool facingLeft = false;
     protected SpriteEffects flip = SpriteEffects.None;
-    protected int mFrame;
-    protected Point mFrameSize;
-    protected List<Rectangle> mPlatforms;
-    protected float mSpeed;
-    protected Texture2D mSprite;
-    protected readonly List<Rectangle> mWalls;
+    protected Point frameSize;
+    protected List<Rectangle> platforms;
+    protected float speed;
+    protected Texture2D sprite;
+    protected readonly List<Rectangle> walls;
     protected int millisecondsPerFrame;
     protected int timeSinceLastFrame;
+    protected int mFrame;
 
     protected Enemy(float posX, float posY, float speedX, float speedY, Texture2D sprite,
         List<Rectangle> walls)
@@ -43,9 +43,9 @@ public abstract class Enemy
         PositionY = posY;
         SpeedX = speedX;
         SpeedY = speedY;
-        mSprite = sprite;
-        mWalls = walls;
-        mFrameSize = new Point(MSpriteWidth, MSpriteHeight);
+        this.sprite = sprite;
+        this.walls = walls;
+        frameSize = new Point(SpriteWidth, SpriteHeight);
         CurrentFrameX = 7;
         CurrentFrameY = 5;
         SheetSize = 4;
@@ -57,40 +57,29 @@ public abstract class Enemy
         PositionX = posX;
         PositionY = posY;
         SpeedX = speed;
-        mSprite = sprite;
-        mWalls = walls;
-        mFrameSize = new Point(64, 69);
+        this.sprite = sprite;
+        this.walls = walls;
+        frameSize = new Point(64, 69);
         CurrentFrameX = 4;
         CurrentFrameY = 4;
         SheetSize = 4;
     }
 
-    public float PositionX { get; set; }
-
-    public float PositionY { get; set; }
-
-    public float SpeedX { get; set; }
-
-    public float SpeedY { get; set; }
-
-    public int CurrentFrameX { get; set; }
-
-    public int CurrentFrameY { get; set; }
-
-    public int SheetSize { get; set; }
-
+    protected float PositionX { get; set; }
+    protected float PositionY { get; set; }
+    protected float SpeedX { get; set; }
+    protected float SpeedY { get; set; }
+    protected int CurrentFrameX { get; set; }
+    protected int CurrentFrameY { get; set; }
+    protected int SheetSize { get; init; }
     public abstract void Update(GameTime gameTime);
-
-    public void Update(GameTime gameTime, Vector2 charliePos)
-    {
-        // Method intentionally left empty.
-    }
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        spriteBatch.Draw(mSprite, new Vector2(PositionX, PositionY),
-            new Rectangle(CurrentFrameX * mFrameSize.X,
-                CurrentFrameY * mFrameSize.Y,
-                mFrameSize.X, mFrameSize.Y), Color.White, 0, Vector2.Zero, 1.0f, flip, 0);
+        spriteBatch.Draw(sprite, new Vector2(PositionX, PositionY),
+            new Rectangle(CurrentFrameX * frameSize.X,
+                CurrentFrameY * frameSize.Y,
+                frameSize.X, frameSize.Y), Color.White, 0,
+            Vector2.Zero, 1.0f, flip, 0);
     }
 }
