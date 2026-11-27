@@ -14,7 +14,7 @@ public class BlueThingy : Enemy
         List<Rectangle> walls, List<Rectangle> platforms)
         : base(xPos, yPos, speedX, speedY, sprite, walls)
     {
-        mPlatforms = platforms;
+        base.platforms = platforms;
         CurrentFrameX = 7;
         CurrentFrameY = 5;
         SheetSize = 7;
@@ -70,7 +70,7 @@ public class BlueThingy : Enemy
         //    }
         //}
 
-        foreach (var platform in mPlatforms)
+        foreach (var platform in platforms)
             if (BlueThingyRect.Intersects(platform))
             {
                 //if (BlueThingyRect.Top >= platform.Bottom + 5 ||
