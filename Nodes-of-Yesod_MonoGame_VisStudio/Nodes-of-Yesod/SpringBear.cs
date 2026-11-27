@@ -25,7 +25,7 @@ public class SpringBear : Enemy
         millisecondsPerFrame = 100;
     }
 
-    public Rectangle enemyRect => new((int)PositionX, (int)PositionY, 64, 69);
+    public Rectangle EnemyRect => new((int)PositionX, (int)PositionY, 64, 69);
 
     public override void Update(GameTime gameTime)
     {
@@ -73,7 +73,7 @@ public class SpringBear : Enemy
             }
 
         // Platform Collision check
-        foreach (var platform in platforms.Where(platform => enemyRect.Intersects(platform)))
+        foreach (var platform in platforms.Where(platform => EnemyRect.Intersects(platform)))
             if (SpeedX > 0)
             {
                 PositionX -= 5;
