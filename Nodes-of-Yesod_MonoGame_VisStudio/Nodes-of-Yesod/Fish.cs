@@ -48,7 +48,7 @@ public class Fish : Enemy
             PositionY < 0)
             SpeedY *= -1;
 
-        foreach (var wallRects in mWalls)
+        foreach (var wallRects in walls)
             if (FishRect.Intersects(wallRects))
             {
                 if (SpeedX > 0)
