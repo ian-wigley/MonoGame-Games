@@ -16,8 +16,8 @@ public class SpringBear : Enemy
         List<Rectangle> walls, List<Rectangle> platforms)
         : base(posX, posY, speedX, speedY, sprite, walls)
     {
-        mPlatforms = platforms;
-        mFrameSize = new Point(64, 69);
+        base.platforms = platforms;
+        frameSize = new Point(64, 69);
         CurrentFrameX = 4;
         CurrentFrameY = 4;
         SheetSize = 4;
@@ -56,8 +56,8 @@ public class SpringBear : Enemy
         }
 
         // Wall Collision check
-        if (mWalls.Count > 0)
-            foreach (var wallRects in mWalls)
+        if (walls.Count > 0)
+            foreach (var wallRects in walls)
             {
                 if (wallRects.X == 62 && PositionX <= 100)
                 {
@@ -73,7 +73,7 @@ public class SpringBear : Enemy
             }
 
         // Platform Collision check
-        foreach (var platform in mPlatforms.Where(platform => enemyRect.Intersects(platform)))
+        foreach (var platform in platforms.Where(platform => enemyRect.Intersects(platform)))
             if (SpeedX > 0)
             {
                 PositionX -= 5;
