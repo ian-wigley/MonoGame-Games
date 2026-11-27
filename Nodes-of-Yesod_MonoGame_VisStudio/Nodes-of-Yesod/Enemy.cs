@@ -32,6 +32,7 @@ public abstract class Enemy
     protected float speed;
     protected Texture2D sprite;
     protected readonly List<Rectangle> walls;
+    protected Rectangle rect;
     protected int millisecondsPerFrame;
     protected int timeSinceLastFrame;
     protected int mFrame;
