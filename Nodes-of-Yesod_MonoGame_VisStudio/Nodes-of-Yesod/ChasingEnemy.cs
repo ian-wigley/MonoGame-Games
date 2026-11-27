@@ -36,12 +36,10 @@ public class ChasingEnemy : Enemy
             PositionY -= SpeedY;
         else if (charliePos.Y > PositionY) PositionY += SpeedY;
 
-        if (timeSinceLastFrame > millisecondsPerFrame)
-        {
-            timeSinceLastFrame -= millisecondsPerFrame;
+        if (timeSinceLastFrame <= millisecondsPerFrame) return;
+        timeSinceLastFrame -= millisecondsPerFrame;
 
-            ++CurrentFrameX;
-            if (CurrentFrameX >= 4 + SheetSize) CurrentFrameX = 4;
-        }
+        ++CurrentFrameX;
+        if (CurrentFrameX >= 4 + SheetSize) CurrentFrameX = 4;
     }
 }
