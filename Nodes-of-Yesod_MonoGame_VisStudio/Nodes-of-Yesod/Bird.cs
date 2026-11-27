@@ -25,7 +25,7 @@ public class Bird : Enemy
     public override void Update(GameTime gameTime)
     {
         timeSinceLastFrame += gameTime.ElapsedGameTime.Milliseconds;
-        PositionX += mSpeed;
+        PositionX += speed;
 
         if (timeSinceLastFrame > millisecondsPerFrame)
         {
@@ -35,19 +35,19 @@ public class Bird : Enemy
             if (CurrentFrameX >= 14 + SheetSize) CurrentFrameX = 14;
         }
 
-        foreach (var wallRects in mWalls)
+        foreach (var wallRects in walls)
             if (BirdRect.Intersects(wallRects))
             {
-                if (mSpeed > 0)
+                if (speed > 0)
                 {
                     PositionX -= 5;
-                    mSpeed *= -1;
+                    speed *= -1;
                     facingLeft = true;
                 }
                 else
                 {
                     PositionX += 5;
-                    mSpeed *= -1;
+                    speed *= -1;
                     facingLeft = false;
                 }
             }
