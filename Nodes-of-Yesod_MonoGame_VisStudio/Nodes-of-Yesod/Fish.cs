@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -31,7 +32,6 @@ public class Fish : Enemy
         if (timeSinceLastFrame > millisecondsPerFrame)
         {
             timeSinceLastFrame -= millisecondsPerFrame;
-
             ++CurrentFrameX;
             if (CurrentFrameX == 9 && CurrentFrameY == 5)
             {
@@ -48,21 +48,18 @@ public class Fish : Enemy
             PositionY < 0)
             SpeedY *= -1;
 
-        foreach (var wallRects in walls)
-            if (FishRect.Intersects(wallRects))
+        foreach (var _ in walls.Where(wallRects => FishRect.Intersects(wallRects)))
+            if (SpeedX > 0)
             {
-                if (SpeedX > 0)
-                {
-                    PositionX -= 5;
-                    SpeedX *= -1;
-                    facingLeft = true;
-                }
-                else
-                {
-                    PositionX += 5;
-                    SpeedX *= -1;
-                    facingLeft = false;
-                }
+                PositionX -= 5;
+                SpeedX *= -1;
+                facingLeft = true;
+            }
+            else
+            {
+                PositionX += 5;
+                SpeedX *= -1;
+                facingLeft = false;
             }
 
         flip = facingLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
