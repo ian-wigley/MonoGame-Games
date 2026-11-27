@@ -34,7 +34,7 @@ public class Charlie(
 
     public Rectangle ColTileRect0 { get; set; }
     public Rectangle ColTileRect1 { get; set; }
-    public bool summerSaultJump { get; set; }
+    public bool SummerSaultJump { get; set; }
     public bool Jump { get; set; }
     public bool Falling { get; set; }
     public bool FacingLeft { get; set; }
@@ -48,7 +48,7 @@ public class Charlie(
     {
         mTrip = trip;
         this.belowScreenCounter = belowScreenCounter;
-        if (summerSaultJump)
+        if (SummerSaultJump)
         {
             if (jumpright)
                 XPosition += 2;
@@ -78,7 +78,7 @@ public class Charlie(
             if (summerSaultFrame >= 16)
             {
                 summerSaultFrame = 0;
-                summerSaultJump = false;
+                SummerSaultJump = false;
             }
         }
 
@@ -96,7 +96,7 @@ public class Charlie(
         //Debugging Image
         //spriteBatch.Draw(mCollisionRectangle, new Vector2(mXPosition + 20, mYPosition), Color.White);
 
-        if (!summerSaultJump)
+        if (!SummerSaultJump)
             spriteBatch.Draw(gameSprites, new Vector2(XPosition, YPosition), gameSpritesRect, Color.White, 0, Vector2.Zero,
                 1.0f, flip, 0);
         else
@@ -117,7 +117,7 @@ public class Charlie(
         }
 
         if (!belowMoon) return;
-        if (Falling && !summerSaultJump)
+        if (Falling && !SummerSaultJump)
         {
             foreach (var _ in plats.Where(platforms => CharlieRect.Intersects(platforms) && (CharlieRect.Bottom == platforms.Top ||
                          CharlieRect.Bottom == platforms.Top + 1 ||
@@ -137,7 +137,7 @@ public class Charlie(
         }
 
         // Check to see if Charlie hits a ledge when summersault jumping
-        if (summerSaultJump && mTrip && plats.Count > 0)
+        if (SummerSaultJump && mTrip && plats.Count > 0)
             foreach (var platforms in plats)
                 if (CharlieRect.Intersects(platforms))
                 {
@@ -166,7 +166,7 @@ public class Charlie(
                 }
 
         // Check to see if Charlie has walked over a gap in the floor
-        if (!Falling && !WalkingOnFloor && !summerSaultJump)
+        if (!Falling && !WalkingOnFloor && !SummerSaultJump)
         {
             var platformCount = plats.Count;
             var checkCounter = 0;
