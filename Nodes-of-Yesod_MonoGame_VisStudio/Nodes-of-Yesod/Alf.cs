@@ -28,7 +28,7 @@ public class Alf : Enemy
     public override void Update(GameTime gameTime)
     {
         timeSinceLastFrame += gameTime.ElapsedGameTime.Milliseconds;
-        PositionX += mSpeed;
+        PositionX += speed;
 
         if (timeSinceLastFrame > millisecondsPerFrame)
         {
@@ -39,13 +39,13 @@ public class Alf : Enemy
                 CurrentFrameX = 0;
         }
 
-        foreach (var wallRects in mWalls.Where(wallRects => AlfRect.Intersects(wallRects)))
-            if (mSpeed > 0)
+        foreach (var wallRects in walls.Where(wallRects => AlfRect.Intersects(wallRects)))
+            if (speed > 0)
             {
                 Turning();
                 turning = false;
                 PositionX -= 5;
-                mSpeed = -1;
+                speed = -1;
                 facingLeft = true;
             }
             else
@@ -53,7 +53,7 @@ public class Alf : Enemy
                 Turning();
                 turning = false;
                 PositionX += 5;
-                mSpeed = 1;
+                speed = 1;
                 facingLeft = false;
             }
 
@@ -63,7 +63,7 @@ public class Alf : Enemy
     private void Turning()
     {
         turning = true;
-        mSpeed = 0;
+        speed = 0;
         CurrentFrameX = 9;
 
         while (CurrentFrameX < SheetSize + 3) CurrentFrameX++;
