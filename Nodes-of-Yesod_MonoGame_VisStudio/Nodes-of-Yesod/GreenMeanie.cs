@@ -42,7 +42,7 @@ public class GreenMeanie : Enemy
             facingLeft = true;
         }
 
-        foreach (var wallRects in mWalls)
+        foreach (var wallRects in walls)
             if (GreenMeanieRect.Intersects(wallRects))
             {
                 if (SpeedX > 0)
