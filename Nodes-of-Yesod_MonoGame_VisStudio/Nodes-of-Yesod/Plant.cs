@@ -13,14 +13,14 @@ public class Plant : Enemy
     public Plant(float xPos, float yPos, float speedX, Texture2D sprite, List<Rectangle> walls)
         : base(xPos, yPos, speedX, 1.0f, sprite, walls)
     {
-        mSprite = sprite;
+        base.sprite = sprite;
         CurrentFrameX = 2;
         CurrentFrameY = 9;
         SheetSize = 3;
         timeSinceLastFrame = 0;
     }
 
-    public Rectangle PlantRect => new(CurrentFrameX * MSpriteWidth, 9 * MSpriteHeight, MSpriteWidth, MSpriteHeight);
+    public Rectangle PlantRect => new(CurrentFrameX * SpriteWidth, 9 * SpriteHeight, SpriteWidth, SpriteHeight);
 
     public override void Update(GameTime gameTime)
     {
@@ -35,6 +35,6 @@ public class Plant : Enemy
 
     public new void Draw(SpriteBatch spriteBatch)
     {
-        spriteBatch.Draw(mSprite, new Vector2(CurrentFrameX, CurrentFrameY), PlantRect, Color.White);
+        spriteBatch.Draw(sprite, new Vector2(CurrentFrameX, CurrentFrameY), PlantRect, Color.White);
     }
 }
