@@ -26,7 +26,7 @@ public class WoodLouse : Enemy
     public override void Update(GameTime gameTime)
     {
         timeSinceLastFrame += gameTime.ElapsedGameTime.Milliseconds;
-        PositionX += mSpeed;
+        PositionX += speed;
 
         if (timeSinceLastFrame > millisecondsPerFrame)
         {
@@ -36,17 +36,17 @@ public class WoodLouse : Enemy
             if (CurrentFrameX >= CurrentFrameX + SheetSize) CurrentFrameX = 0;
         }
 
-        foreach (var _ in mWalls.Where(wallRects => WoodLouseRect.Intersects(wallRects)))
-            if (mSpeed > 0)
+        foreach (var _ in walls.Where(wallRects => WoodLouseRect.Intersects(wallRects)))
+            if (speed > 0)
             {
                 PositionX -= 5;
-                mSpeed *= -1;
+                speed *= -1;
                 facingLeft = true;
             }
             else
             {
                 PositionX += 5;
-                mSpeed *= -1;
+                speed *= -1;
                 facingLeft = false;
             }
 
