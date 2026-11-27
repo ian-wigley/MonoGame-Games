@@ -24,7 +24,7 @@ internal class RedSpaceman : Enemy
     }
 
     public Rectangle RedSpacemanRect =>
-        new(mRedSpacemanFrame * MSpriteWidth, 9 * MSpriteHeight, MSpriteWidth, MSpriteHeight);
+        new(mRedSpacemanFrame * SpriteWidth, 9 * SpriteHeight, SpriteWidth, SpriteHeight);
 
     public override void Update(GameTime gameTime)
     {
@@ -40,6 +40,6 @@ internal class RedSpaceman : Enemy
 
     public new void Draw(SpriteBatch spriteBatch)
     {
-        spriteBatch.Draw(mSprite, new Vector2(mRedSpacemanX, mRedSpacemanY), RedSpacemanRect, Color.White);
+        spriteBatch.Draw(sprite, new Vector2(mRedSpacemanX, mRedSpacemanY), RedSpacemanRect, Color.White);
     }
 }
