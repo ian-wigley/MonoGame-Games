@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -20,12 +21,12 @@ public class Caterpillar : Enemy
         millisecondsPerFrame = 100;
     }
 
-    public Rectangle CaterpillarRect => new((int)PositionX, (int)PositionY, 64, 69);
+    private Rectangle CaterpillarRect => new((int)PositionX, (int)PositionY, 64, 69);
 
     public override void Update(GameTime gameTime)
     {
         timeSinceLastFrame += gameTime.ElapsedGameTime.Milliseconds;
-        PositionX += mSpeed;
+        PositionX += speed;
 
         if (timeSinceLastFrame > millisecondsPerFrame)
         {
@@ -34,21 +35,18 @@ public class Caterpillar : Enemy
             if (CurrentFrameX >= SheetSize) CurrentFrameX = 0;
         }
 
-        foreach (var wallRects in mWalls)
-            if (CaterpillarRect.Intersects(wallRects))
+        foreach (var _ in walls.Where(wallRects => CaterpillarRect.Intersects(wallRects)))
+            if (speed > 0)
             {
-                if (mSpeed > 0)
-                {
-                    PositionX -= 5;
-                    mSpeed *= -1;
-                    facingLeft = true;
-                }
-                else
-                {
-                    PositionX += 5;
-                    mSpeed *= -1;
-                    facingLeft = false;
-                }
+                PositionX -= 5;
+                speed *= -1;
+                facingLeft = true;
+            }
+            else
+            {
+                PositionX += 5;
+                speed *= -1;
+                facingLeft = false;
             }
 
         flip = facingLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
