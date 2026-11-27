@@ -265,7 +265,6 @@ public class Yesod : Game
     {
         GraphicsDevice.Clear(Color.Black);
         spriteBatch.Begin();
-
         if (!gameOn)
         {
             spriteBatch.Draw(frontScreen, new Vector2(0, 0), Color.White);
@@ -569,7 +568,7 @@ public class Yesod : Game
                                                && oldState.IsKeyUp(Keys.LeftControl) && !man.Falling)
             {
                 man.WalkingOnFloor = false;
-                man.summerSaultJump = true;
+                man.SummerSaultJump = true;
                 jumpRight = true;
                 trip = true;
             }
@@ -578,7 +577,7 @@ public class Yesod : Game
                                               && oldState.IsKeyUp(Keys.LeftControl) && !man.Falling)
             {
                 man.WalkingOnFloor = false;
-                man.summerSaultJump = true;
+                man.SummerSaultJump = true;
                 jumpRight = false;
                 trip = true;
             }
@@ -597,7 +596,7 @@ public class Yesod : Game
             if (keyboard.IsKeyDown(Keys.F2)) man.Falling = false;
 
             if (gamePad.Buttons.A == ButtonState.Pressed || (keyboard.IsKeyDown(Keys.LeftControl)
-                                                             && belowMoon && !man.Falling && !man.summerSaultJump))
+                                                             && belowMoon && !man.Falling && !man.SummerSaultJump))
             {
                 tempY = man.YPosition;
                 man.Jump = true;
