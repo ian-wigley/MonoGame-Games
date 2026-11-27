@@ -25,7 +25,7 @@ public class Fire : Enemy
     public override void Update(GameTime gameTime)
     {
         timeSinceLastFrame += gameTime.ElapsedGameTime.Milliseconds;
-        PositionX += mSpeed;
+        PositionX += speed;
 
         if (timeSinceLastFrame > millisecondsPerFrame)
         {
@@ -35,18 +35,18 @@ public class Fire : Enemy
             if (CurrentFrameX >= 10 + SheetSize) CurrentFrameX = 10;
         }
 
-        foreach (var wallRects in mWalls)
+        foreach (var wallRects in walls)
             if (FireRect.Intersects(wallRects))
             {
-                if (mSpeed > 0)
+                if (speed > 0)
                 {
                     PositionX -= 5;
-                    mSpeed *= -1;
+                    speed *= -1;
                 }
                 else
                 {
                     PositionX += 5;
-                    mSpeed *= -1;
+                    speed *= -1;
                 }
             }
     }
