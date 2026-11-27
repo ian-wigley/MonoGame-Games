@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -18,10 +19,9 @@ public class Fire : Enemy
         SheetSize = 4;
         timeSinceLastFrame = 0;
         millisecondsPerFrame = 100;
+        rect = new Rectangle((int)PositionX, (int)PositionY, 64, 69);
     }
-
-    public Rectangle FireRect => new((int)PositionX, (int)PositionY, 64, 69);
-
+    
     public override void Update(GameTime gameTime)
     {
         timeSinceLastFrame += gameTime.ElapsedGameTime.Milliseconds;
@@ -35,19 +35,16 @@ public class Fire : Enemy
             if (CurrentFrameX >= 10 + SheetSize) CurrentFrameX = 10;
         }
 
-        foreach (var wallRects in walls)
-            if (FireRect.Intersects(wallRects))
+        foreach (var _ in walls.Where(wallRects => rect.Intersects(wallRects)))
+            if (speed > 0)
             {
-                if (speed > 0)
-                {
-                    PositionX -= 5;
-                    speed *= -1;
-                }
-                else
-                {
-                    PositionX += 5;
-                    speed *= -1;
-                }
+                PositionX -= 5;
+                speed *= -1;
+            }
+            else
+            {
+                PositionX += 5;
+                speed *= -1;
             }
     }
 }
