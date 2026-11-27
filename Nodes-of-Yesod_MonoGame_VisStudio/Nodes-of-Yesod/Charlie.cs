@@ -9,36 +9,36 @@ public class Charlie(
     int x,
     int y,
     int lives,
-    Texture2D gamesprites,
-    Texture2D collisionrect,
+    Texture2D gameSprites,
+    Texture2D collisionRect,
     List<Rectangle> walls,
     List<Rectangle> rects,
     List<Rectangle> plats,
     List<Rectangle> mEdibleWalls,
     List<Rectangle> mAlchiems,
     List<Rectangle> mRoof,
-    int[,] toTheUndergound)
+    int[,] toTheUnderground)
 {
-    private const double elapsedSecs = 0.1f;
+    private const double ElapsedSecs = 0.1f;
     private double animTimer;
     private SpriteEffects flip = SpriteEffects.None;
-    private int mBelowScreenCounter;
-    private Texture2D mCollisionRectangle = collisionrect;
+    private int belowScreenCounter;
     private bool mTrip;
-    private readonly int spriteHeight = 69;
-    private readonly int spriteWidth = 64;
-    private int summerSaultFrame = 0;
+    private const int SpriteHeight = 69;
+    private const int SpriteWidth = 64;
+    private int summerSaultFrame;
     private Rectangle summerSaultRect;
-
-    public Rectangle charlieRect => new(XPosition + 20, YPosition, 30, 69);
+    private Texture2D mCollisionRectangle = collisionRect;
+    
+    private Rectangle CharlieRect => new(XPosition + 20, YPosition, 30, 69);
 
     public Rectangle ColTileRect0 { get; set; }
     public Rectangle ColTileRect1 { get; set; }
-    public bool summerSaultJump { get; set; } = false;
-    public bool Jump { get; set; } = false;
+    public bool summerSaultJump { get; set; }
+    public bool Jump { get; set; }
     public bool Falling { get; set; }
-    public bool FacingLeft { get; set; } = false;
-    public bool WalkingOnFloor { get; set; } = false;
+    public bool FacingLeft { get; set; }
+    public bool WalkingOnFloor { get; set; }
     public int XPosition { get; set; } = x;
     public int YPosition { get; set; } = y;
     public int Lives { get; } = lives;
@@ -47,19 +47,25 @@ public class Charlie(
         ref int screenCounter, ref int alchiem)
     {
         mTrip = trip;
-        mBelowScreenCounter = belowScreenCounter;
+        this.belowScreenCounter = belowScreenCounter;
         if (summerSaultJump)
         {
             if (jumpright)
                 XPosition += 2;
             else
                 XPosition -= 2;
-            if (summerSaultFrame < 8 && mTrip)
-                YPosition -= 10;
-            else if (summerSaultFrame >= 8 && summerSaultFrame < 16 && mTrip) YPosition += 10;
+            switch (summerSaultFrame)
+            {
+                case < 8 when mTrip:
+                    YPosition -= 10;
+                    break;
+                case >= 8 and < 16 when mTrip:
+                    YPosition += 10;
+                    break;
+            }
 
 
-            animTimer += elapsedSecs;
+            animTimer += ElapsedSecs;
             if (animTimer > 0.2)
             {
                 animTimer = 0;
@@ -67,7 +73,7 @@ public class Charlie(
             }
 
             summerSaultRect =
-                new Rectangle(summerSaultFrame * spriteWidth, 1 * spriteHeight, spriteWidth, spriteHeight);
+                new Rectangle(summerSaultFrame * SpriteWidth, 1 * SpriteHeight, SpriteWidth, SpriteHeight);
 
             if (summerSaultFrame >= 16)
             {
@@ -78,16 +84,11 @@ public class Charlie(
 
         Collisions(ref belowMoon, ref belowScreenCounter, ref screenCounter, ref alchiem, ref trip);
 
-        if (FacingLeft)
-            flip = SpriteEffects.FlipHorizontally;
-        else
-            flip = SpriteEffects.None;
+        flip = FacingLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
-        if (Jump)
-        {
-            YPosition -= 5;
-            if (tempY - YPosition >= 70) Jump = false;
-        }
+        if (!Jump) return;
+        YPosition -= 5;
+        if (tempY - YPosition >= 70) Jump = false;
     }
 
     public void Draw(SpriteBatch spriteBatch, Rectangle gameSpritesRect)
@@ -96,17 +97,17 @@ public class Charlie(
         //spriteBatch.Draw(mCollisionRectangle, new Vector2(mXPosition + 20, mYPosition), Color.White);
 
         if (!summerSaultJump)
-            spriteBatch.Draw(gamesprites, new Vector2(XPosition, YPosition), gameSpritesRect, Color.White, 0, Vector2.Zero,
+            spriteBatch.Draw(gameSprites, new Vector2(XPosition, YPosition), gameSpritesRect, Color.White, 0, Vector2.Zero,
                 1.0f, flip, 0);
         else
-            spriteBatch.Draw(gamesprites, new Vector2(XPosition, YPosition), summerSaultRect, Color.White, 0, Vector2.Zero,
+            spriteBatch.Draw(gameSprites, new Vector2(XPosition, YPosition), summerSaultRect, Color.White, 0, Vector2.Zero,
                 1.0f, flip, 0);
     }
 
     private void Collisions(ref bool belowMoon, ref int belowScreenCounter, ref int screenCounter, ref int alchiem,
         ref bool trip)
     {
-        if (!belowMoon && (charlieRect.Intersects(ColTileRect0) || charlieRect.Intersects(ColTileRect1)))
+        if (!belowMoon && (CharlieRect.Intersects(ColTileRect0) || CharlieRect.Intersects(ColTileRect1)))
         {
 //            belowScreenCounter = screenCounter;
             screenCounter += 16;
@@ -118,16 +119,16 @@ public class Charlie(
         if (!belowMoon) return;
         if (Falling && !summerSaultJump)
         {
-            foreach (var platforms in plats.Where(platforms => charlieRect.Intersects(platforms) && (charlieRect.Bottom == platforms.Top ||
-                         charlieRect.Bottom == platforms.Top + 1 ||
-                         charlieRect.Bottom == platforms.Top + 2 ||
-                         charlieRect.Bottom == platforms.Top + 3)))
+            foreach (var _ in plats.Where(platforms => CharlieRect.Intersects(platforms) && (CharlieRect.Bottom == platforms.Top ||
+                         CharlieRect.Bottom == platforms.Top + 1 ||
+                         CharlieRect.Bottom == platforms.Top + 2 ||
+                         CharlieRect.Bottom == platforms.Top + 3)))
             {
                 Falling = false;
                 break;
             }
 
-            if (rects.Any(floor => charlieRect.Intersects(floor)))
+            if (rects.Any(floor => CharlieRect.Intersects(floor)))
             {
                 Falling = false;
                 WalkingOnFloor = true;
@@ -138,12 +139,12 @@ public class Charlie(
         // Check to see if Charlie hits a ledge when summersault jumping
         if (summerSaultJump && mTrip && plats.Count > 0)
             foreach (var platforms in plats)
-                if (charlieRect.Intersects(platforms))
+                if (CharlieRect.Intersects(platforms))
                 {
-                    var charBottom = platforms.Top - charlieRect.Height;
-                    if (charlieRect.Top <= platforms.Top) YPosition = charBottom - 5;
+                    var charBottom = platforms.Top - CharlieRect.Height;
+                    if (CharlieRect.Top <= platforms.Top) YPosition = charBottom - 5;
 
-                    if (charlieRect.Top >= platforms.Bottom - 15 || charlieRect.Top >= platforms.Bottom - 5)
+                    if (CharlieRect.Top >= platforms.Bottom - 15 || CharlieRect.Top >= platforms.Bottom - 5)
                     {
                         YPosition += 1;
                         Jump = false;
@@ -156,8 +157,8 @@ public class Charlie(
         // Check to see if Charlie is jumping and hits a ledge from underneath
         if (Jump && plats.Count > 0)
             foreach (var platforms in plats)
-                if (charlieRect.Intersects(platforms) && charlieRect.Top >= platforms.Bottom - 16 &&
-                    charlieRect.Top <= platforms.Bottom - 10)
+                if (CharlieRect.Intersects(platforms) && CharlieRect.Top >= platforms.Bottom - 16 &&
+                    CharlieRect.Top <= platforms.Bottom - 10)
                 {
                     YPosition += 2;
                     Jump = false;
@@ -170,7 +171,7 @@ public class Charlie(
             var platformCount = plats.Count;
             var checkCounter = 0;
             foreach (var platforms in plats)
-                if (!charlieRect.Intersects(platforms))
+                if (!CharlieRect.Intersects(platforms))
                     checkCounter++;
 
             if (checkCounter == platformCount) Falling = true;
@@ -181,7 +182,7 @@ public class Charlie(
             var floorCount = rects.Count;
             var checkCounter = 0;
             foreach (var floor in rects)
-                if (!charlieRect.Intersects(floor))
+                if (!CharlieRect.Intersects(floor))
                     checkCounter++;
 
             if (checkCounter == floorCount) Falling = true;
@@ -190,7 +191,7 @@ public class Charlie(
         // Check to see if Charlie walks into the walls
         if (walls.Count > 0)
             foreach (var wallRects in walls)
-                if (charlieRect.Intersects(wallRects))
+                if (CharlieRect.Intersects(wallRects))
                 {
                     if (FacingLeft)
                     {
@@ -219,7 +220,7 @@ public class Charlie(
                         XPosition = 740;
                     }
                 }
-                else if (charlieRect.Intersects(edible))
+                else if (CharlieRect.Intersects(edible))
                 {
                     if (FacingLeft)
                     {
@@ -233,7 +234,7 @@ public class Charlie(
 
         if (mRoof.Count > 0)
             foreach (var roof in mRoof)
-                if (charlieRect.Intersects(roof))
+                if (CharlieRect.Intersects(roof))
                 {
                     YPosition += 5;
                     Jump = false;
@@ -241,15 +242,15 @@ public class Charlie(
 
         if (mAlchiems.Count > 0)
             foreach (var alchiems in mAlchiems)
-                if (charlieRect.Intersects(alchiems))
+                if (CharlieRect.Intersects(alchiems))
                 {
-                    var span = mBelowScreenCounter * 10;
+                    var span = this.belowScreenCounter * 10;
                     for (var i = span; i < span + 13; i++)
                     for (var j = 1; j < 10; j++)
-                        if (toTheUndergound[i, j] == 22)
+                        if (toTheUnderground[i, j] == 22)
                         {
                             // replace the alchiems with space
-                            toTheUndergound[i, j] = 4;
+                            toTheUnderground[i, j] = 4;
                             alchiem += 1;
                         }
                 }
