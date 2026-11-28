@@ -7,12 +7,13 @@ namespace JetPacReloaded;
 public class BaseObject
 {
     protected static readonly Random Rand = new();
+    protected int NumberOfFrames;
     protected int Frame;
     protected int Height;
+    protected int Width;
     protected Texture2D Image;
     protected Rectangle Rect;
     protected Vector2 ScreenLocation;
-    protected int Width;
 
     protected BaseObject()
     {
