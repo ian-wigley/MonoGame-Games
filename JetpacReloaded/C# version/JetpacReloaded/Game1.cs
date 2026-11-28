@@ -146,8 +146,9 @@ public class Game1 : Game
 
 
         // _jetManTexture = Content.Load<Texture2D>("man");
-        _jetManTexture = Content.Load<Texture2D>("jetman");
-
+        // _jetManTexture = Content.Load<Texture2D>("jetman");
+        _jetManTexture = Content.Load<Texture2D>("Flying");
+        
         // _menuTexture = Content.Load<Texture2D>("loading");
         _mParticleTexture = Content.Load<Texture2D>("particle");
         _mRocketTexture = Content.Load<Texture2D>("rocket");
@@ -752,7 +753,8 @@ public class Game1 : Game
         if (Keyboard.GetState().IsKeyDown(Keys.A)) _drawnWithLighting = true;
         if (Keyboard.GetState().IsKeyDown(Keys.S)) _drawnWithLighting = false;
 
-        _jetMan.JetManAnimFrame = _currentFrame;
+//        _jetMan.JetManAnimFrame = _currentFrame;
+
         //m_jetManPosition = new Vector2(x, y);
         float floaterX = _x += (int)GetVelocityX(testX);
         float floaterY = _y += (int)GetVelocityY(testY);
@@ -965,7 +967,7 @@ public class Game1 : Game
 
             _spriteBatch.End();
 
-//            foreach (var particle in _particles) particle.Draw(_spriteBatch, _camera);
+            foreach (var particle in _particles) particle.Draw(_spriteBatch, _camera);
 
             if (_drawnWithLighting)
             {
