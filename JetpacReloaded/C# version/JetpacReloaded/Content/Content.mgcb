@@ -114,7 +114,8 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:jetman.PNG
+/build:Flying.png
+#/build:jetman.PNG
 
 #begin lightmask.png
 /importer:TextureImporter
