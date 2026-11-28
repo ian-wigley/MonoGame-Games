@@ -10,9 +10,10 @@ public class JetMan : BaseObject
 
     public JetMan(int x, int y, Texture2D image, Texture2D debugImage)
     {
+        NumberOfFrames = 8;
         Image = image;
         Height = image.Height; // 68;
-        Width = image.Width / 5; // 64;
+        Width = image.Width / NumberOfFrames; // 64;
         Rect = new Rectangle(Frame * Width, 0, Width, Height);
         ScreenLocation = new Vector2(x, y);
         _debugImage = debugImage;
@@ -29,8 +30,10 @@ public class JetMan : BaseObject
 
     public void Update(Vector2 vec, SpriteEffects flip)
     {
+        //                   this.m_frame = this.m_frame % 4 + 1;
+        Frame = Frame % NumberOfFrames + 1;
         ScreenLocation = vec;
-//            Rect = new Rectangle(Frame * Width, 0, Width, Height);
+        Rect = new Rectangle(Frame * Width, 0, Width, Height);
         _flip = flip;
     }
 
